@@ -1,44 +1,27 @@
-import { Button, ListItem, Stack, List, Text } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
-import { getNameList } from "../utils/localStorage";
+import { Button, ListItem, Stack, List, Text, Heading } from "@chakra-ui/react";
+import { useAppProvider } from "../provider/AppProvider";
 
 export const ListNames = () => {
-  const { nameList } = useContext(AppContext);
-
-  const onClearList = () => {
-    setNames([]);
-    setPickedName("");
-  };
+  const { list, cleanList } = useAppProvider();
 
   return (
-    <Stack w="full" h="full" p={10} spacing={10} alignItems="center">
-      <List>
-        {nameList.length == 0 ? (
-          <Text> Empty list </Text>
-        ) : (
+    <Stack w="full" h="full" p={5} spacing={5} alignItems="center">
+      <Heading size="lg">Names</Heading>
+      {list.length == 0 ? (
+        <Text>Empty list</Text>
+      ) : (
+        <List>
           <>
-            {nameList.map((name) => (
-              <ListItem key={name}>{name}</ListItem>
+            {list.map((name, index) => (
+              <ListItem key={index}>{name}</ListItem>
             ))}
 
-            <Button onClick={onClearList} mt={5} colorScheme="red">
+            <Button onClick={cleanList} mt={5} colorScheme="red">
               Clear list
             </Button>
           </>
-        )}
-        {/* {names.length > 0 && (
-            <>
-              {names.map((name) => (
-                <ListItem key={name}>{name}</ListItem>
-              ))}
-
-              <Button onClick={onClearList} mt={5}>
-                Clear list
-              </Button>
-            </>
-          )} */}
-      </List>
+        </List>
+      )}
     </Stack>
   );
 };

@@ -1,68 +1,125 @@
-import { Button, Stack, Input } from "@chakra-ui/react";
-import { useCallback, useContext, useState } from "react";
-import { AppContext } from "../context/AppContext";
-// import { useDropzone } from "react-dropzone";
+import {
+  Button,
+  Stack,
+  Input,
+  Checkbox,
+  Tooltip,
+  useDisclosure,
+  Text,
+} from "@chakra-ui/react";
+import { useState, useCallback } from "react";
+import { PickerModal } from "../components";
+import { useDropzone } from "react-dropzone";
+import { convertImageToText } from "../utils";
+import { useAppProvider } from "../provider/AppProvider";
 
 export const InputNames = () => {
-  // const onDrop = useCallback((acceptedFiles) => {
-  //   console.log("acceptedFiles", acceptedFiles);
-  // }, []);
-
-  // const { getRootProps } = useDropzone({
-  //   onDrop,
-  //   accept: { "image/png": [".png"], "image/jpg": [".jpg", ".jpeg"] },
-  //   maxFiles: 1,
-  // });
-
-  const [inputName, setInputName] = useState("");
+  const [name, setName] = useState("");
   const [pickedName, setPickedName] = useState("");
-  const { addName } = useContext(AppContext);
+  const [showGif, setShowGif] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { addBulkToList, addToList, list } = useAppProvider();
 
-  const handleEnter = (event) => {
-    if (event.key === "Enter") {
-      onAddName();
-    }
-  };
+  const onDrop = useCallback((file) => {
+    if (!file || !file[0]) return;
 
-  const onAddName = () => {
-    if (inputName === "") { // || names.includes(inputName)) {
-      setInputName("");
-      return;
-    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const imageDataUri = reader.result;
+      convertImageToText(imageDataUri).then((textArray) => {
+        addBulkToList(textArray);
+      });
+    };
+    reader.readAsDataURL(file[0]);
+  }, []);
 
-    addName(inputName);
-    setInputName("");
-  };
+  const { getRootProps } = useDropzone({
+    onDrop,
+    accept: { "image/png": [".png"], "image/jpg": [".jpg", ".jpeg"] },
+    maxFiles: 1,
+  });
 
   const onPickName = () => {
-    const randomIndex = Math.floor(Math.random() * names.length);
-    setPickedName(names[randomIndex]);
+    if (list.length === 0) {
+      return;
+    }
+    const randomIndex = Math.floor(Math.random() * list.length);
+    setPickedName(list[randomIndex]);
+    onOpen();
   };
 
+  const onInputChange = ({ target }) => {
+    const { value } = target;
+    setName(value);
+  };
+
+  const onSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      if (/^\s*$/.test(name)) {
+        return;
+      }
+
+      addToList(name.trim());
+      setName("");
+    },
+    [name]
+  );
+
   return (
-    <Stack w="full" h="full" p={10} spacing={10} alignItems="center">
+    <Stack w="full" h="full" p={5} spacing={10} alignItems="center">
       <Stack spacing={3}>
-        <Input
-          type="text"
-          name="name"
-          value={inputName}
-          placeholder="Person name"
-          onKeyDown={handleEnter}
-          onChange={(event) => {
-            setInputName(event.target.value);
-          }}
-        />
-        <Button onClick={onAddName} mt={3} colorScheme="green">
-          Add Name
-        </Button>
-        <Button onClick={onPickName}>Pick!</Button>
-        {pickedName && <p>{pickedName}</p>}
-        {/* <Stack {...getRootProps()}>
-          <p>
-            Or.. drag 'n' drop an image with names , or click to select an image
+        <form as="form" onSubmit={onSubmit}>
+          <Stack alignItems="center" spacing={3} w="full">
+            <Input
+              type="text"
+              name="name"
+              value={name}
+              placeholder="Person name"
+              onChange={onInputChange}
+            />
+            <Button
+              type="submit"
+              colorScheme="green"
+              alignItems="center"
+              w="full"
+            >
+              Add Name
+            </Button>
+          </Stack>
+        </form>
+        <Stack
+          border="1px"
+          borderColor="green"
+          alignItems="center"
+          p={3}
+          {...getRootProps()}
+          cursor="pointer"
+        >
+          <Text w={250} textAlign="center" fontSize="xl">
+            Or drag and drop an image with names, or click to select an image
             file
-          </p>
-        </Stack> */}
+          </Text>
+        </Stack>
+        <Button onClick={onPickName} isDisabled={list.length === 0}>
+          Pick!
+        </Button>
+        <Checkbox
+          defaultChecked
+          colorScheme="green"
+          onChange={(e) => setShowGif(e.target.checked)}
+        >
+          <Tooltip label="A gif will be shown in a modal if selected  ">
+            Show gif based on picked name
+          </Tooltip>
+        </Checkbox>
+        <PickerModal
+          pickedName={pickedName}
+          isOpen={isOpen}
+          onClose={onClose}
+          showGif={showGif}
+        />
       </Stack>
     </Stack>
   );

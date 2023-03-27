@@ -1,17 +1,55 @@
-export const getNameList = (key = "names") => {
-  return JSON.parse(localStorage.getItem(key));
-};
+class AppLocalStorage {
+  key;
 
-export const addToNameList = (newName, key = "names") => {
-  const currentNames = JSON.parse(localStorage.getItem(key)) || [];
-  const nameList = currentNames === null ? nameList = [currentNames] : [...currentNames, newName];
-  localStorage.setItem(key, JSON.stringify(nameList));
-};
+  constructor(key) {
+    this.key = key;
+  }
 
-export const removeNameFromList = (name = "") => {
-    
+  save(value) {
+    const currentLS = this.read();
+
+    if (currentLS.length === 0) {
+      localStorage.setItem(this.key, JSON.stringify([...value]));
+      return;
+    }
+
+    localStorage.setItem(this.key, JSON.stringify([...currentLS, ...value]));
+  }
+
+  remove(value) {
+    const currentLS = this.read();
+
+    if (currentLS.length === 0) {
+      return;
+    }
+
+    const index = currentLS.indexOf(value);
+
+    if (index < 0) {
+      return;
+    }
+
+    currentLS.splice(index, 1);
+
+    localStorage.setItem(this.key, JSON.stringify(currentLS));
+  }
+
+  clean() {
+    localStorage.removeItem(this.key);
+  }
+
+  read() {
+    try {
+      const currentLS = localStorage.getItem(this.key);
+      if (!currentLS) {
+        return [];
+      }
+
+      return JSON.parse(currentLS);
+    } catch {
+      return [];
+    }
+  }
 }
 
-export const clearNameList = (key = "names") => {
-    localStorage.setItem(key, []);
-}
+export const AppLSInstance = new AppLocalStorage("name");

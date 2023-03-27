@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { InputNames, ListNames } from "./sections";
 import { ChakraProvider, Container, Flex } from "@chakra-ui/react";
-import { AppProvider } from "./context/AppProvider";
+import { AppProvider } from "./provider/AppProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
