@@ -24,8 +24,19 @@ export function AppProvider({ children }) {
 
   const addBulkToList = useCallback((arr) => {
     setList((prev) => {
-      const total = [...prev, ...arr];
-      AppLSInstance.save(arr);
+      const reducedArr = arr.reduce((accumulator, currentValue) => {
+        if (
+          currentValue.length !== 0 &&
+          accumulator.indexOf(currentValue) === -1
+        ) {
+          accumulator.push(currentValue);
+        }
+
+        return accumulator;
+      }, []);
+
+      const total = [...prev, ...reducedArr];
+      AppLSInstance.save(reducedArr);
       return total;
     });
   }, []);
