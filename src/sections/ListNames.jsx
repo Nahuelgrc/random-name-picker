@@ -1,8 +1,9 @@
-import { Button, ListItem, Stack, List, Text, Heading } from "@chakra-ui/react";
+import { Button, Stack, Text, Heading, Flex, Box } from "@chakra-ui/react";
 import { useAppProvider } from "../provider/AppProvider";
+import { MinusIcon } from "@chakra-ui/icons";
 
 export const ListNames = () => {
-  const { list, cleanList } = useAppProvider();
+  const { list, cleanList, removeElement } = useAppProvider();
 
   return (
     <Stack w="full" h="full" p={5} spacing={5} alignItems="center">
@@ -10,17 +11,32 @@ export const ListNames = () => {
       {list.length == 0 ? (
         <Text>Empty list</Text>
       ) : (
-        <List>
-          <>
+        <Stack w="275px" alignItems="center">
+          <Stack mb={1} w="full">
             {list.map((name, index) => (
-              <ListItem key={index}>{name}</ListItem>
+              <Flex key={index} justifyContent="space-between">
+                <Stack>
+                  <Text>{name}</Text>
+                </Stack>
+                <Stack justifyContent="end">
+                  <Button
+                    onClick={() => {
+                      removeElement(name);
+                    }}
+                    size="xs"
+                    colorScheme="red"
+                  >
+                    <MinusIcon />
+                  </Button>
+                </Stack>
+              </Flex>
             ))}
+          </Stack>
 
-            <Button onClick={cleanList} mt={5} colorScheme="red">
-              Clear list
-            </Button>
-          </>
-        </List>
+          <Button onClick={cleanList} colorScheme="red" w="full">
+            Clear list
+          </Button>
+        </Stack>
       )}
     </Stack>
   );

@@ -46,11 +46,12 @@ export function AppProvider({ children }) {
     AppLSInstance.clean();
   }, []);
 
-  const removeElement = useCallback(() => {
+  const removeElement = useCallback((el) => {
     setList((prev) => {
       const index = prev.indexOf(el);
 
       if (index >= 0) {
+        AppLSInstance.remove(el);
         prev.splice(index, 1);
       }
       return [...prev];
