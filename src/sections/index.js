@@ -1,2 +1,2 @@
-export * from "./InputNames";
-export * from "./ListNames";
+export * from './InputNames';
+export * from './ListNames';

@@ -1,7 +1,9 @@
-import { Button, Stack, Text, Heading, Flex, Box } from "@chakra-ui/react";
-import { useAppProvider } from "../provider/AppProvider";
-import { MinusIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
+import {
+  Button, Stack, Text, Heading, Flex, Box,
+} from '@chakra-ui/react';
+import { MinusIcon } from '@chakra-ui/icons';
+import React, { useState } from 'react';
+import { useAppProvider } from '../provider/AppProvider';
 
 export function ListNamesItem({ name, removeElement }) {
   const [showButton, setShowButton] = useState(false);
@@ -16,36 +18,34 @@ export function ListNamesItem({ name, removeElement }) {
         <Text>{name}</Text>
       </Stack>
       <Stack justifyContent="end">
-        {showButton && 
+        {showButton
+          && (
           <Button
             onClick={() => removeElement(name)}
             colorScheme="red"
             size="xs"
           >
-          <MinusIcon />
-        </Button>
-        }
+            <MinusIcon />
+          </Button>
+          )}
       </Stack>
     </Flex>
   );
-} 
+}
 
-export const ListNames = () => {
+export function ListNames() {
   const { list, cleanList, removeElement } = useAppProvider();
 
   return (
     <Stack w="full" h="full" p={5} spacing={5} alignItems="center">
       <Heading size="lg">Names</Heading>
-      {list.length == 0 ? (
+      {list.length === 0 ? (
         <Text>Empty list</Text>
       ) : (
         <Stack w="275px" alignItems="center">
           <Stack mb={1} w="full">
-            {list.map((name, index) => {
-              return <ListNamesItem name={name} key={index} removeElement={removeElement} />
-            })}
+            {list.map((name, index) => <ListNamesItem name={name} key={index} removeElement={removeElement} />)}
           </Stack>
-
           <Button onClick={cleanList} colorScheme="red" w="full">
             Clear list
           </Button>
@@ -53,4 +53,4 @@ export const ListNames = () => {
       )}
     </Stack>
   );
-};
+}
