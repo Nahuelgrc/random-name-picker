@@ -1,11 +1,11 @@
-import {
+import React, {
   createContext,
   useContext,
   useMemo,
   useState,
   useCallback,
-} from "react";
-import { AppLSInstance } from "../utils/localStorage.js";
+} from 'react';
+import { AppLSInstance } from '../utils/localStorage';
 
 const AppContext = createContext([]);
 
@@ -26,8 +26,8 @@ export function AppProvider({ children }) {
     setList((prev) => {
       const reducedArr = arr.reduce((accumulator, currentValue) => {
         if (
-          currentValue.length !== 0 &&
-          accumulator.indexOf(currentValue) === -1
+          currentValue.length !== 0
+          && accumulator.indexOf(currentValue) === -1
         ) {
           accumulator.push(currentValue);
         }
@@ -66,7 +66,7 @@ export function AppProvider({ children }) {
       removeElement,
       cleanList,
     }),
-    [list]
+    [list],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -76,7 +76,7 @@ export function useAppProvider() {
   const provider = useContext(AppContext);
 
   if (!provider) {
-    throw new Error("provider is undefined");
+    throw new Error('provider is undefined');
   }
 
   return provider;

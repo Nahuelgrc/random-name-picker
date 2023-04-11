@@ -1,1 +1,1 @@
-export * from "./PickerModal";
+export * from './PickerModal';

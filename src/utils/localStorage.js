@@ -52,4 +52,4 @@ class AppLocalStorage {
   }
 }
 
-export const AppLSInstance = new AppLocalStorage("name");
+export const AppLSInstance = new AppLocalStorage('name');

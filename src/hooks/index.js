@@ -1,1 +1,1 @@
-export * from "./useGiphy";
+export * from './useGiphy';

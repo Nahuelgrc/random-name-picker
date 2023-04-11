@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { getGifUrlByString } from "../api/giphy";
+import { useEffect, useState } from 'react';
+import { getGifUrlByString } from '../api/giphy';
 
 export function useGiphy({ pickedName, isOpen }) {
   const [gifUrl, setGifUrl] = useState();

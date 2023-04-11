@@ -1,3 +1,4 @@
+import React, { useState, useCallback } from 'react';
 import {
   Button,
   Stack,
@@ -6,16 +7,15 @@ import {
   Tooltip,
   useDisclosure,
   Text,
-} from "@chakra-ui/react";
-import { useState, useCallback } from "react";
-import { PickerModal } from "../components";
-import { useDropzone } from "react-dropzone";
-import { convertImageToText } from "../utils";
-import { useAppProvider } from "../provider/AppProvider";
+} from '@chakra-ui/react';
+import { useDropzone } from 'react-dropzone';
+import { PickerModal } from '../components';
+import { convertImageToText } from '../utils';
+import { useAppProvider } from '../provider/AppProvider';
 
-export const InputNames = () => {
-  const [name, setName] = useState("");
-  const [pickedName, setPickedName] = useState("");
+export function InputNames() {
+  const [name, setName] = useState('');
+  const [pickedName, setPickedName] = useState('');
   const [showGif, setShowGif] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addBulkToList, addToList, list } = useAppProvider();
@@ -35,7 +35,7 @@ export const InputNames = () => {
 
   const { getRootProps } = useDropzone({
     onDrop,
-    accept: { "image/png": [".png"], "image/jpg": [".jpg", ".jpeg"] },
+    accept: { 'image/png': ['.png'], 'image/jpg': ['.jpg', '.jpeg'] },
     maxFiles: 1,
   });
 
@@ -62,15 +62,15 @@ export const InputNames = () => {
       }
 
       addToList(name.trim());
-      setName("");
+      setName('');
     },
-    [name]
+    [name],
   );
 
   return (
     <Stack w="full" h="full" p={5} spacing={10} alignItems="center">
       <Stack spacing={3}>
-        <form as="form" onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
           <Stack alignItems="center" spacing={3} w="full">
             <Input
               type="text"
@@ -123,4 +123,4 @@ export const InputNames = () => {
       </Stack>
     </Stack>
   );
-};
+}

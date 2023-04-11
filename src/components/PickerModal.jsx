@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Button,
   Stack,
@@ -10,11 +11,13 @@ import {
   Image,
   ModalBody,
   Text,
-} from "@chakra-ui/react";
-import { useGiphy } from "../hooks";
-import { Spinner } from "@chakra-ui/react";
+  Spinner,
+} from '@chakra-ui/react';
+import { useGiphy } from '../hooks';
 
-export const PickerModal = ({ pickedName, isOpen, onClose, showGif }) => {
+export function PickerModal({
+  pickedName, isOpen, onClose, showGif,
+}) {
   const { gifUrl, isLoading } = useGiphy({ pickedName, isOpen });
 
   return (
@@ -25,8 +28,8 @@ export const PickerModal = ({ pickedName, isOpen, onClose, showGif }) => {
           <ModalHeader>{pickedName}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {showGif &&
-              (isLoading ? (
+            {showGif
+              && (isLoading ? (
                 <Spinner size="xl" />
               ) : (
                 <>
@@ -44,4 +47,4 @@ export const PickerModal = ({ pickedName, isOpen, onClose, showGif }) => {
       </Modal>
     </Stack>
   );
-};
+}
