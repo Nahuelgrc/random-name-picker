@@ -22,5 +22,6 @@ module.exports = {
     'react/prop-types': 'warn',
     'react/jsx-props-no-spreading': 'warn',
     'no-unused-vars': 'warn',
+    'max-len': 'warn',
   },
 };

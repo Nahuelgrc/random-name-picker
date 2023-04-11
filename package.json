@@ -7,6 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint --quiet \"./src/**/*.{js, jsx}\"",
+    "lint:fix": "eslint --quiet --fix \"./src/**/*.{js, jsx}\"",
     "prepare": "husky install"
   },
   "dependencies": {

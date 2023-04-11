@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import {
   Button, Stack, Text, Heading, Flex, Box,
 } from '@chakra-ui/react';
