@@ -22,7 +22,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "tesseract.js": "^4.0.2",
-    "vite": "^4.2.1"
+    "vite": "^4.5.14"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",
