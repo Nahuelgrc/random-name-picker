@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAppProvider } from '../provider/AppProvider';
 import {
   Button,
   Stack,
@@ -19,6 +20,7 @@ export function PickerModal({
   pickedName, isOpen, onClose, showGif,
 }) {
   const { gifUrl, isLoading } = useGiphy({ pickedName, isOpen });
+  const { addToList } = useAppProvider();
 
   return (
     <Stack>
@@ -39,7 +41,13 @@ export function PickerModal({
               ))}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="green" mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={() => {
+              addToList(pickedName);
+              onClose();
+            }}>
+              Reinsert Name
+            </Button>
+            <Button colorScheme="green" onClick={onClose}>
               Close
             </Button>
           </ModalFooter>
