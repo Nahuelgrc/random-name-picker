@@ -53,3 +53,24 @@ class AppLocalStorage {
 }
 
 export const AppLSInstance = new AppLocalStorage('name');
+
+export const saveSetting = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error saving setting ${key}:`, error);
+  }
+};
+
+export const readSetting = (key, defaultValue) => {
+  try {
+    const value = localStorage.getItem(key);
+    if (value === null) {
+      return defaultValue;
+    }
+    return JSON.parse(value);
+  } catch (error) {
+    console.error(`Error reading setting ${key}:`, error);
+    return defaultValue;
+  }
+};

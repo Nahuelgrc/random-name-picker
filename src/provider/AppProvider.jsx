@@ -5,12 +5,17 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { AppLSInstance } from '../utils/localStorage';
+import { AppLSInstance, readSetting, saveSetting } from '../utils/localStorage';
+
+const SHOW_GIF_KEY = 'showGifSetting';
+const REMOVE_NAME_KEY = 'removeNameSetting';
 
 const AppContext = createContext([]);
 
 export function AppProvider({ children }) {
-  const [list, setList] = useState(AppLSInstance.read());
+  const [showGif, setShowGif] = useState(() => readSetting(SHOW_GIF_KEY, true));
+  const [removeNameAfterPicking, setRemoveNameAfterPicking] = useState(() => readSetting(REMOVE_NAME_KEY, true));
+  const [list, setList] = useState(() => AppLSInstance.read());
 
   const addToList = useCallback((el) => {
     setList((prev) => {
@@ -46,6 +51,22 @@ export function AppProvider({ children }) {
     AppLSInstance.clean();
   }, []);
 
+  const toggleShowGif = useCallback(() => {
+    setShowGif((prev) => {
+      const newValue = !prev;
+      saveSetting(SHOW_GIF_KEY, newValue);
+      return newValue;
+    });
+  }, []);
+
+  const toggleRemoveNameAfterPicking = useCallback(() => {
+    setRemoveNameAfterPicking((prev) => {
+      const newValue = !prev;
+      saveSetting(REMOVE_NAME_KEY, newValue);
+      return newValue;
+    });
+  }, []);
+
   const removeElement = useCallback((el) => {
     setList((prev) => {
       const index = prev.indexOf(el);
@@ -65,8 +86,12 @@ export function AppProvider({ children }) {
       addBulkToList,
       removeElement,
       cleanList,
+      showGif,
+      toggleShowGif,
+      removeNameAfterPicking,
+      toggleRemoveNameAfterPicking,
     }),
-    [list],
+    [list, showGif, removeNameAfterPicking],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

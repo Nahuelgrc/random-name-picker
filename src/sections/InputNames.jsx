@@ -16,9 +16,17 @@ import { useAppProvider } from '../provider/AppProvider';
 export function InputNames() {
   const [name, setName] = useState('');
   const [pickedName, setPickedName] = useState('');
-  const [showGif, setShowGif] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addBulkToList, addToList, list } = useAppProvider();
+  const {
+    addBulkToList,
+    addToList,
+    list,
+    removeElement,
+    showGif,
+    toggleShowGif,
+    removeNameAfterPicking,
+    toggleRemoveNameAfterPicking,
+  } = useAppProvider();
 
   const onDrop = useCallback((file) => {
     if (!file || !file[0]) return;
@@ -44,7 +52,11 @@ export function InputNames() {
       return;
     }
     const randomIndex = Math.floor(Math.random() * list.length);
-    setPickedName(list[randomIndex]);
+    const selectedName = list[randomIndex];
+    setPickedName(selectedName);
+    if (removeNameAfterPicking) {
+      removeElement(selectedName);
+    }
     onOpen();
   };
 
@@ -106,12 +118,21 @@ export function InputNames() {
           Pick!
         </Button>
         <Checkbox
-          defaultChecked
+          isChecked={showGif}
           colorScheme="green"
-          onChange={(e) => setShowGif(e.target.checked)}
+          onChange={toggleShowGif}
         >
           <Tooltip label="A gif will be shown in a modal if selected  ">
             Show gif based on picked name
+          </Tooltip>
+        </Checkbox>
+        <Checkbox
+          isChecked={removeNameAfterPicking}
+          colorScheme="green"
+          onChange={toggleRemoveNameAfterPicking}
+        >
+          <Tooltip label="The picked name will be removed from the list after being selected">
+            Remove name after picking
           </Tooltip>
         </Checkbox>
         <PickerModal
